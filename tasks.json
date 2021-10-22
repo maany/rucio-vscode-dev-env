@@ -1,0 +1,410 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "start-containers",
+			"type": "docker-compose",
+			"dockerCompose": {
+				"up": {
+					"detached": true,
+					"build": true
+				},
+				"files": [
+					"${workspaceFolder}/.vscode/docker-compose.yml"
+				]
+			},
+		},
+		{
+			"label": "start-rucio",
+			"type": "shell",
+			"dependsOn": "start-containers",
+			"command": "sleep 5 && docker exec -t rucio-dev /opt/rucio/etc/init-dev-container.sh",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": "Initialization is now Complete! Happy Debugging.*",
+				  }
+				}
+			]
+		},
+		{
+			"label": "stop-rucio",
+			"type": "docker-compose",
+			"dockerCompose": {
+				"down": {
+					"removeVolumes": true,
+				},
+				"files": [
+					"${workspaceFolder}/.vscode/docker-compose.yml"
+				]
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": "^.*Removing network vscode_default",
+				  }
+				}
+			]
+		},
+		{
+			"label": "cleanup",
+			"type": "shell",
+			"command": "docker exec -t rucio-dev pkill python || exit 0",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": ".",
+				  }
+				}
+			]
+		},
+		{
+			"label": "rucio-pytest:debug",
+			"type": "shell",
+			"command": "docker exec -d -t rucio-dev python -m debugpy --listen 0.0.0.0:5681 --wait-for-client -m pytest -vvvrxs ${relativeFile} && sleep 5",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "new"
+			},
+			"problemMatcher": {
+				"owner": "python",
+				"fileLocation": ["relative", "${workspaceFolder}/lib/rucio"],
+                "pattern": [
+                    {
+                        "regexp": "^.*File \\\"([^\\\"]|.*)\\\", line (\\d+).*",
+                        "file": 1,
+                        "line": 2
+                    },
+                    {
+                        "regexp": "^.*raise.*$"
+                    },
+                    {
+                        "regexp": "^\\s*(.*)\\s*$",
+                        "message": 1
+                    }
+                ],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Restarting with watchdog (inotify)",
+					"endsPattern": "^.*Debugger is active!",
+				}
+			}
+		},
+		{
+			"label": "rucio-ui",
+			"type": "shell",
+			"command": "docker exec -e DEBUGGER=False -e FLASK_APP=debug_utils.rucio_ui_debug -t rucio-dev python -m flask run --cert=ui --host=0.0.0.0 --port=5000",
+			"isBackground": true,
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": {
+				"owner": "python",
+				"fileLocation": ["relative", "${workspaceFolder}/lib/rucio"],
+                "pattern": [
+                    {
+                        "regexp": "^.*File \\\"([^\\\"]|.*)\\\", line (\\d+).*",
+                        "file": 1,
+                        "line": 2
+                    },
+                    {
+                        "regexp": "^.*raise.*$"
+                    },
+                    {
+                        "regexp": "^\\s*(.*)\\s*$",
+                        "message": 1
+                    }
+                ],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Restarting with watchdog (inotify)",
+					"endsPattern": "^.*Debugger is active!",
+				}
+			},
+		},
+		{
+			"label": "rucio-ui:debug",
+			"type": "shell",
+			"dependsOn": "rucio-server",
+			"command": "docker exec -e DEBUGGER=True -e FLASK_APP=debug_utils.rucio_ui_debug -t rucio-dev python -m flask run --cert=ui --host=0.0.0.0 --port=5000",
+			"isBackground": true,
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": {
+				"owner": "python",
+				"fileLocation": ["relative", "${workspaceFolder}/lib/rucio"],
+                "pattern": [
+                    {
+                        "regexp": "^.*File \\\"([^\\\"]|.*)\\\", line (\\d+).*",
+                        "file": 1,
+                        "line": 2
+                    },
+                    {
+                        "regexp": "^.*raise.*$"
+                    },
+                    {
+                        "regexp": "^\\s*(.*)\\s*$",
+                        "message": 1
+                    }
+                ],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Restarting with watchdog (inotify)",
+					"endsPattern": "^.*Debugger is active!",
+				}
+			}
+		},
+		{
+			"label": "rucio-server",
+			"type": "shell",
+			"command": "docker exec -t -e DEBUGGER=False -e FLASK_APP=debug_utils.rucio_server_debug rucio-dev python -m flask run --cert=server --host=0.0.0.0 --port=443",
+			"isBackground": true,
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": {
+				"owner": "python",
+				"fileLocation": ["relative", "${workspaceFolder}/lib/rucio"],
+                "pattern": [
+                    {
+                        "regexp": "^.*File \\\"([^\\\"]|.*)\\\", line (\\d+).*",
+                        "file": 1,
+                        "line": 2
+                    },
+                    {
+                        "regexp": "^.*raise.*$"
+                    },
+                    {
+                        "regexp": "^\\s*(.*)\\s*$",
+                        "message": 1
+                    }
+                ],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Restarting with watchdog (inotify)",
+					"endsPattern": "^.*Debugger is active!",
+				}
+			},
+		},
+		{
+			"label": "rucio-server:debug",
+			"type": "shell",
+			"command": "docker exec -t -e DEBUGGER=True -e FLASK_APP=debug_utils.rucio_server_debug rucio-dev python -m flask run --cert=server --host=0.0.0.0 --port=443",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": {
+				"owner": "python",
+				"fileLocation": ["relative", "${workspaceFolder}/lib/rucio"],
+                "pattern": [
+                    {
+                        "regexp": "^.*File \\\"([^\\\"]|.*)\\\", line (\\d+).*",
+                        "file": 1,
+                        "line": 2
+                    },
+                    {
+                        "regexp": "^.*raise.*$"
+                    },
+                    {
+                        "regexp": "^\\s*(.*)\\s*$",
+                        "message": 1
+                    }
+                ],
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "^.*Restarting with watchdog (inotify)",
+					"endsPattern": "^.*Debugger is active!",
+				}
+			}
+		},
+		{
+			"label": "rucio-cli:pre-debug",
+			"type": "shell",
+			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio -e DEBUG_STAGE=pre rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": "debugger added!",
+				  }
+				}
+			]
+		},
+		{
+			"label": "rucio-cli:post-debug",
+			"type": "shell",
+			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio -e DEBUG_STAGE=post rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": "debugger removed!",
+				  }
+				}
+			]
+		},
+		{
+			"label": "rucio-admin:pre-debug",
+			"type": "shell",
+			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio-admin -e DEBUG_STAGE=pre rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": "debugger added!",
+				  }
+				}
+			]
+		},
+		{
+			"label": "rucio-admin:post-debug",
+			"type": "shell",
+			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio-admin -e DEBUG_STAGE=post rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [
+				{
+				  "pattern": [
+					{
+					  "regexp": ".",
+					  "file": 1,
+					  "location": 2,
+					  "message": 3
+					}
+				  ],
+				  "background": {
+					"activeOnStart": true,
+					"beginsPattern": ".",
+					"endsPattern": "debugger removed!",
+				  }
+				}
+			]
+		}
+	]
+}

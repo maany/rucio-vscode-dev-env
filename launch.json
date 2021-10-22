@@ -1,0 +1,65 @@
+{
+    "configurations": [
+        {
+            "name": "Rucio: CLI Debug",
+            "type": "python",
+            "request": "attach",
+            "justMyCode": false,
+            "connect": {
+                "host": "0.0.0.0",
+                "port": 5680
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/opt/rucio"
+                }
+            ]
+        },
+        {
+            "name": "PyTest: Debug",
+            "type": "python",
+            "request": "attach",
+            "preLaunchTask": "rucio-pytest:debug",
+            "justMyCode": false,
+            "connect": {
+                "host": "0.0.0.0",
+                "port": 5681
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/",
+                    "remoteRoot": "/opt/rucio"
+                }
+            ]
+        },
+        {
+            "name": "UI: Debug",
+            "type": "python",
+            "request": "attach",
+            "port": 5678,
+            "host": "0.0.0.0",
+            "justMyCode": false,
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/",
+                    "remoteRoot": "/opt/rucio"
+                }
+            ]
+        },
+        {
+            "name": "Server: Debug",
+            "type": "python",
+            "request": "attach",
+            "port": 5679,
+            "host": "0.0.0.0",
+            "justMyCode": false,
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/",
+                    "remoteRoot": "/opt/rucio"
+                }
+            ]
+        }
+    ]
+}
