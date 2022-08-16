@@ -1,6 +1,64 @@
 {
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+        },
+        {
+            "name": "Header Lint",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/add_header",
+            "args": [
+                "-i",
+                "--disable-add-me",
+                "lib/rucio/tests/test_trace.py"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Autotest Run",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/test/run_tests.py",
+            "console": "integratedTerminal",
+            "args": [
+                "<",
+                "${workspaceFolder}/tools/test/run_tests_sample_input.json"
+            ],
+            "justMyCode": false
+        },
+        {
+            "name": "Test Image Build",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/test/build_images.py",
+            "console": "integratedTerminal",
+            "args": [
+                "etc/docker/test",
+                "/<",
+                "${workspaceFolder}/tools/test/build_images_sample_input.json"
+            ]
+        },
+        {
+            "name": "VoTest Helper",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/test/votest_helper.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-v",
+                "--vo",
+                "atlas",
+                "-t",
+                "--file",
+                "${workspaceFolder}/etc/docker/test/matrix_policy_package_tests.yml"
+            ]
+        },
+        {
             "name": "Rucio: CLI Debug",
             "type": "python",
             "request": "attach",

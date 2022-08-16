@@ -9,6 +9,7 @@ import OpenSSL
 
 host = os.getenv("RUCIO_HOST")
 
+
 class PeerCertWSGIRequestHandler(serving.WSGIRequestHandler):
     """
     We subclass this class so that we can gain access to the connection
@@ -72,7 +73,7 @@ def authproxy(path):
 
     excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
     headers = [(name, value) for (name, value) in resp.raw.headers.items()
-       if name.lower() not in excluded_headers]
+               if name.lower() not in excluded_headers]
 
     response = Response(resp.content, resp.status_code, headers)
     return response
@@ -87,6 +88,7 @@ def serve_static(path):
 def serve_media(path):
     return send_from_directory('/opt/rucio/lib/rucio/web/ui/media', path)
 
+
 # to establish an SSL socket we need the private key and certificate that
 # we want to serve to users.
 # app_key_password here is None, because the key isn't password protected,
@@ -98,7 +100,10 @@ app_cert = '/etc/grid-security/hostcert.pem'
 # in order to verify client certificates we need the certificate of the
 # CA that issued the client's certificate. In this example I have a
 # single certificate, but this could also be a bundle file.
-ca_cert_chain = '/etc/grid-security/client-ca-bundle.pem'
+# There is a /etc/grod-security/client-ca-bundle.pem available.
+# If you install a client certificate from the CA bundled in this configuration, then use that CA
+# If you use your CERN grid user ceritificate, then use ca-bundle.pem
+ca_cert_chain = '/etc/grid-security/ca-bundle.pem'
 
 # create_default_context establishes a new SSLContext object that
 # aligns with the purpose we provide as an argument. Here we provide
@@ -112,16 +117,18 @@ ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH,
 ssl_context.load_cert_chain(certfile=app_cert, keyfile=app_key, password=app_key_password)
 ssl_context.verify_mode = ssl.CERT_REQUIRED
 
+
 def initialize_flask_server_debugger_if_needed():
-        if os.getenv("DEBUGGER") == "True":
-            if serving.is_running_from_reloader():
-                import debugpy
-                debugpy.listen(("0.0.0.0", 5678))
-                print("⏳ VS Code debugger can now be attached, press F5 in VS Code ⏳", flush=True)
-                debugpy.wait_for_client()
-                print("🎉 VS Code debugger attached, enjoy debugging 🎉", flush=True)
-            else:
-                print("Socket already in use")
+    if os.getenv("DEBUGGER") == "True":
+        if serving.is_running_from_reloader():
+            import debugpy
+            debugpy.listen(("0.0.0.0", 5678))
+            print("⏳ VS Code debugger can now be attached, press F5 in VS Code ⏳", flush=True)
+            debugpy.wait_for_client()
+            print("🎉 VS Code debugger attached, enjoy debugging 🎉", flush=True)
+        else:
+            print("Socket already in use")
+
 
 initialize_flask_server_debugger_if_needed()
 # if __name__ == '__main__':

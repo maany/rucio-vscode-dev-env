@@ -26,18 +26,27 @@ services:
       - RUCIO_HOST=rucio-devmaany.cern.ch #TODO change
     privileged: true
   ruciodb:
-    image: docker.io/postgres:11
+    image: docker.io/postgres:14
     environment:
       - POSTGRES_USER=rucio
       - POSTGRES_DB=rucio
       - POSTGRES_PASSWORD=secret
-    command: ["-c", "fsync=off","-c", "synchronous_commit=off","-c", "full_page_writes=off"]
+    command:
+      [
+        "-c",
+        "fsync=off",
+        "-c",
+        "synchronous_commit=off",
+        "-c",
+        "full_page_writes=off"
+      ]
   graphite:
     image: docker.io/graphiteapp/graphite-statsd
   fts:
     image: docker.io/rucio/fts
   ftsdb:
-    image: docker.io/mysql:5
+    image: docker.io/mysql:8
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       - MYSQL_USER=fts
       - MYSQL_PASSWORD=fts
@@ -79,7 +88,7 @@ services:
     volumes:
       - ../etc/certs/hostcert_minio.pem:/root/.minio/certs/public.crt:Z
       - ../etc/certs/hostcert_minio.key.pem:/root/.minio/certs/private.key:Z
-    command: ["server", "/data"]
+    command: [ "server", "/data" ]
   activemq:
     image: docker.io/webcenter/activemq:latest
     environment:
@@ -90,3 +99,8 @@ services:
       - ACTIVEMQ_USERS_receiver=supersecret
       - ACTIVEMQ_GROUPS_reads=receiver
       - ACTIVEMQ_CONFIG_SCHEDULERENABLED=true
+  ssh1:
+    image: docker.io/rucio/ssh
+    network_mode: "service:rucio"
+    volumes:
+      - ../etc/certs/ssh/ruciouser_sshkey.pub:/tmp/sshkey.pub:Z

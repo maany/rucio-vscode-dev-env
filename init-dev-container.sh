@@ -52,8 +52,8 @@ echo ""
 
 echo "************* Overwrite Flask CLI ******************"
 echo "***************************************************"
-rm /usr/local/lib/python3.6/site-packages/flask/cli.py
-cp /opt/rucio/debug_utils/flask_cli.py /usr/local/lib/python3.6/site-packages/flask/cli.py
+# rm /usr/local/lib/python3.6/site-packages/flask/cli.py
+# cp /opt/rucio/debug_utils/flask_cli.py /usr/local/lib/python3.6/site-packages/flask/cli.py
 
 echo "Done!"
 echo ""
