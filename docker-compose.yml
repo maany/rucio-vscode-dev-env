@@ -18,6 +18,7 @@ services:
       - ../tools:/opt/rucio/tools
       - ../bin:/opt/rucio/bin
       - ../lib:/opt/rucio/lib
+      - ../etc/rucio.cfg:/opt/rucio/etc/rucio.cfg
       - /sys/fs/cgroup:/sys/fs/cgroup
     environment:
       - X509_USER_CERT=/opt/rucio/etc/usercert.pem
