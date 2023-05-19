@@ -45,15 +45,23 @@ cp /etc/grid-security/hostcert.pem.cern.ca /etc/grid-security/hostcert.pem
 cp /etc/grid-security/hostkey.pem.cern.ca /etc/grid-security/hostkey.pem
 
 echo "export X509_CERT_DIR=/etc/grid-security/ca-bundle.pem" >> ~/.bashrc
-
 echo "Done!"
 echo ""
 
+echo "Setting up Rucio Client"
+echo "***********************"
+config_file="path/to/config/file"
+new_ca_cert="/etc/grid-security/ca-bundle.pem"
+
+sed -i "s@^ca_cert.*@ca_cert = /etc/grid-security/ca-bundle.pem@" /opt/rucio/etc/rucio.cfg
 
 echo "************* Setup WebUI ******************"
 echo "***************************************************"
 # rm /usr/local/lib/python3.6/site-packages/flask/cli.py
 # cp /opt/rucio/debug_utils/flask_cli.py /usr/local/lib/python3.6/site-packages/flask/cli.py
+echo "[webui]" >> /opt/rucio/etc/rucio.cfg
+echo "urls = http://localhost:3000" >> /opt/rucio/etc/rucio.cfg
+
 
 echo "Done!"
 echo ""
