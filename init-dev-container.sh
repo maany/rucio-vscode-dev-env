@@ -52,13 +52,14 @@ echo "************* Setup Rucio Client ******************"
 echo "***************************************************"
 
 sed -i "s@^ca_cert.*@ca_cert = /etc/grid-security/ca-bundle.pem@" /opt/rucio/etc/rucio.cfg
+echo "Done!"
+echo ""
 
 echo "************* Setup WebUI ******************"
 echo "***************************************************"
 
 echo "[webui]" >> /opt/rucio/etc/rucio.cfg
 echo "urls = http://localhost:3000" >> /opt/rucio/etc/rucio.cfg
-
 
 echo "Done!"
 echo ""

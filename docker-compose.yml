@@ -14,9 +14,6 @@ services:
       - ../bin:/opt/rucio/bin
       - ../lib:/opt/rucio/lib
       - /sys/fs/cgroup:/sys/fs/cgroup
-      # - ../etc/certs/rucio_ca.pem:/etc/grid-security/certificates/5fca1cb1.0:z
-      # - ../etc/certs/hostcert_rucio.pem:/etc/grid-security/hostcert.pem:z
-      # - ../etc/certs/hostcert_rucio.key.pem:/etc/grid-security/hostkey.pem:z
       - ../etc/certs/ruciouser.pem:/opt/rucio/etc/usercert.pem:z
       - ../etc/certs/ruciouser.key.pem:/opt/rucio/etc/userkey.pem:z
       - ../etc/certs/ruciouser.certkey.pem:/opt/rucio/etc/usercertkey.pem:z
