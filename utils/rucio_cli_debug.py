@@ -52,7 +52,7 @@ if __name__ == "__main__":
         print(f"Adding debugger code to {f} at port {debug_port}")
         print("Add your debug points in the code and open a terminal to execute the command")
         print("Then run the approprate run config from the debug tab.")
-        print("After you are finished debugging, run the appropriate rucio-{bin}/")
+        print("After you are finished debugging, run the appropriate cleanup for rucio-{bin}/")
         add_debugger(f)
         print("debugger added!")
     elif stage == "post":

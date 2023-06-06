@@ -21,12 +21,15 @@ RUN rm /usr/bin/python && ln -fs /usr/bin/python3 /usr/bin/python
 EXPOSE 5678
 
 ## Copy CA and Certificates
+COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
+COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
+COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
 COPY certs/hostcert.pem /etc/grid-security/hostcert.pem.cern.ca
 COPY certs/hostkey.pem /etc/grid-security/hostkey.pem.cern.ca
 COPY certs/ca-bundle.pem /etc/grid-security/ca-bundle.pem
 
 ## Copy CA chain used for issuing client certificates
-COPY client-ca/intermediate/certs/ca-chain.cert.pem /etc/grid-security/client-ca-bundle.pem
+# COPY client-ca/intermediate/certs/ca-chain.cert.pem /etc/grid-security/client-ca-bundle.pem
 
 ## Set environment variables
 ENV LC_ALL="en_US.utf-8" 

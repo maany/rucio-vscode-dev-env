@@ -128,4 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-certs/host*
+certs/hostcert.pem
+certs/hostkey.pem
