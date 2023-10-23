@@ -3,22 +3,22 @@
 	"tasks": [
 		{
 			"label": "start-containers",
-			"type": "docker-compose",
-			"dockerCompose": {
-				"up": {
-					"detached": true,
-					"build": true
-				},
-				"files": [
-					"${workspaceFolder}/.vscode/docker-compose.yml"
-				]
-			},
+			"type": "shell",
+			"command": "podman-compose -f ${workspaceFolder}/.vscode/podman-compose.yml up",
+			//"podmanCompose": {
+			//	"up": {
+			//		"detached": true,
+			//		"build": true
+			//	},
+			//	"files": [
+			//		"${workspaceFolder}/.vscode/podman-compose.yml"
+			//	]
+			//},
 		},
 		{
 			"label": "start-rucio",
 			"type": "shell",
-			"dependsOn": "start-containers",
-			"command": "sleep 5 && docker exec -t rucio-dev /opt/rucio/etc/init-dev-container.sh",
+			"command": "sleep 5 && podman exec -t rucio-dev /opt/rucio/etc/init-dev-container.sh",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -45,39 +45,39 @@
 				}
 			]
 		},
-		{
-			"label": "stop-rucio",
-			"type": "docker-compose",
-			"dockerCompose": {
-				"down": {
-					"removeVolumes": true,
-				},
-				"files": [
-					"${workspaceFolder}/.vscode/docker-compose.yml"
-				]
-			},
-			"problemMatcher": [
-				{
-				  "pattern": [
-					{
-					  "regexp": ".",
-					  "file": 1,
-					  "location": 2,
-					  "message": 3
-					}
-				  ],
-				  "background": {
-					"activeOnStart": true,
-					"beginsPattern": ".",
-					"endsPattern": "^.*Removing network vscode_default",
-				  }
-				}
-			]
-		},
+		//{
+		//	"label": "stop-rucio",
+		//	"type": "shell",
+		//	"dockerCompose": {
+		//		"down": {
+		//			"removeVolumes": true,
+		//		},
+		//		"files": [
+		//			"${workspaceFolder}/.vscode/podman-compose.yml"
+		//		]
+		//	},
+		//	"problemMatcher": [
+		//		{
+		//		  "pattern": [
+		//			{
+		//			  "regexp": ".",
+		//			  "file": 1,
+		//			  "location": 2,
+		//			  "message": 3
+		//			}
+		//		  ],
+		//		  "background": {
+		//			"activeOnStart": true,
+		//			"beginsPattern": ".",
+		//			"endsPattern": "^.*Removing network vscode_default",
+		//		  }
+		//		}
+		//	]
+		//},
 		{
 			"label": "cleanup",
 			"type": "shell",
-			"command": "docker exec -t rucio-dev pkill python || exit 0",
+			"command": "podman exec -t rucio-dev pkill python || exit 0",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -107,7 +107,7 @@
 		{
 			"label": "rucio-pytest:debug",
 			"type": "shell",
-			"command": "docker exec -d -t rucio-dev python -m debugpy --listen 0.0.0.0:5681 --wait-for-client -m pytest -vvvrxs ${relativeFile} && sleep 5",
+			"command": "podman exec -d -t rucio-dev python -m debugpy --listen 0.0.0.0:5681 --wait-for-client -m pytest -vvvrxs ${relativeFile} && sleep 5",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -141,7 +141,7 @@
 		{
 			"label": "rucio-ui",
 			"type": "shell",
-			"command": "docker exec -e DEBUGGER=False -e FLASK_APP=debug_utils.rucio_ui_debug -t rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=5000",
+			"command": "podman exec -e DEBUGGER=False -e FLASK_APP=debug_utils.rucio_ui_debug -t rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=5000",
 			"isBackground": true,
 			"presentation": {
 				"echo": true,
@@ -179,7 +179,7 @@
 			"label": "rucio-ui:debug",
 			"type": "shell",
 			"dependsOn": "rucio-server",
-			"command": "docker exec -e DEBUGGER=True -e FLASK_APP=debug_utils.rucio_ui_debug -t rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=5000",
+			"command": "podman exec -e DEBUGGER=True -e FLASK_APP=debug_utils.rucio_ui_debug -t rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=5000",
 			"isBackground": true,
 			"presentation": {
 				"echo": true,
@@ -216,7 +216,7 @@
 		{
 			"label": "rucio-server",
 			"type": "shell",
-			"command": "docker exec -t -e DEBUGGER=False -e FLASK_APP=debug_utils.rucio_server_debug rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=443",
+			"command": "podman exec -t -e DEBUGGER=False -e FLASK_APP=debug_utils.rucio_server_debug rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=443",
 			"isBackground": true,
 			"presentation": {
 				"echo": true,
@@ -253,7 +253,7 @@
 		{
 			"label": "rucio-server:debug",
 			"type": "shell",
-			"command": "docker exec -t -e DEBUGGER=True -e FLASK_APP=debug_utils.rucio_server_debug rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=443",
+			"command": "podman exec -t -e DEBUGGER=True -e FLASK_APP=debug_utils.rucio_server_debug rucio-dev python -m flask run --cert=/etc/grid-security/hostcert.pem --key=/etc/grid-security/hostkey.pem --host=0.0.0.0 --port=443",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -289,7 +289,7 @@
 		{
 			"label": "rucio-cli:pre-debug",
 			"type": "shell",
-			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio -e DEBUG_STAGE=pre rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"command": "podman exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio -e DEBUG_STAGE=pre rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -319,7 +319,7 @@
 		{
 			"label": "rucio-cli:post-debug",
 			"type": "shell",
-			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio -e DEBUG_STAGE=post rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"command": "podman exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio -e DEBUG_STAGE=post rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -349,7 +349,7 @@
 		{
 			"label": "rucio-admin:pre-debug",
 			"type": "shell",
-			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio-admin -e DEBUG_STAGE=pre rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"command": "podman exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio-admin -e DEBUG_STAGE=pre rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -379,7 +379,7 @@
 		{
 			"label": "rucio-admin:post-debug",
 			"type": "shell",
-			"command": "docker exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio-admin -e DEBUG_STAGE=post rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
+			"command": "podman exec -t -e DEBUG_PORT=5680 -e RUCIO_BIN_NAME=rucio-admin -e DEBUG_STAGE=post rucio-dev python /opt/rucio/debug_utils/rucio_cli_debug.py",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",

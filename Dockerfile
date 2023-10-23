@@ -12,7 +12,7 @@ COPY utils /opt/rucio/debug_utils
 RUN rm /usr/bin/python && ln -fs /usr/bin/python2 /usr/bin/python
 
 ## install utils
-RUN yum install -y wget net-tools iproute openssh openssh-server openssh-clients openssl-libs tcpdump telnet ntp ntpupdate
+RUN yum install -y wget net-tools iproute openssh openssh-server openssh-clients openssl-libs tcpdump telnet
 
 ## enable python3
 RUN rm /usr/bin/python && ln -fs /usr/bin/python3 /usr/bin/python
@@ -21,7 +21,7 @@ RUN rm /usr/bin/python && ln -fs /usr/bin/python3 /usr/bin/python
 EXPOSE 5678
 
 ## Copy CA and Certificates
-COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
+#COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
 COPY certs/hostcert.pem /etc/grid-security/hostcert.pem.cern.ca
@@ -46,19 +46,19 @@ ENV PYTHONUNBUFFERED 1
 COPY init-dev-container.sh /opt/rucio/etc/
 
 ## init system inside the container ##
-ENV container docker
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-    systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-    rm -f /lib/systemd/system/multi-user.target.wants/*;\
-    rm -f /etc/systemd/system/*.wants/*;\
-    rm -f /lib/systemd/system/local-fs.target.wants/*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*;\
-    rm -f /lib/systemd/system/anaconda.target.wants/*;
-
-VOLUME [ "/sys/fs/cgroup" ]
-CMD ["/usr/sbin/init"]
+#ENV container docker
+#RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+#    systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+#    rm -f /lib/systemd/system/multi-user.target.wants/*;\
+#    rm -f /etc/systemd/system/*.wants/*;\
+#    rm -f /lib/systemd/system/local-fs.target.wants/*; \
+#    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+#    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+#    rm -f /lib/systemd/system/basic.target.wants/*;\
+#    rm -f /lib/systemd/system/anaconda.target.wants/*;
+#
+#VOLUME [ "/sys/fs/cgroup" ]
+CMD ["sleep", "infinity"]
 
 
 
