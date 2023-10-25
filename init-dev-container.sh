@@ -1,15 +1,15 @@
 #!/bin/bash
-echo "************ Setting up ntp ****************"
-echo "********************************************"
-systemctl start ntpd
-systemctl enable ntpd
-systemctl status ntpd
-ntpdate -u -s 0.centos.pool.ntp.org 1.centos.pool.ntp.org 2.centos.pool.ntp.org
-systemctl restart ntpd
-timedatectl set-timezone Europe/Paris
-timedatectl
-echo "Done!"
-echo "" 
+#echo "************ Setting up ntp ****************"
+#echo "********************************************"
+#systemctl start ntpd
+#systemctl enable ntpd
+#systemctl status ntpd
+#ntpdate -u -s 0.centos.pool.ntp.org 1.centos.pool.ntp.org 2.centos.pool.ntp.org
+#systemctl restart ntpd
+#timedatectl set-timezone Europe/Paris
+#timedatectl
+#echo "Done!"
+#echo "" 
 
 echo "************* Copying Rucio Config ******************"
 echo "*****************************************************"
@@ -19,7 +19,7 @@ echo ""
 
 echo "************* Initialize Rucio ******************"
 echo "*************************************************"
-tools/run_tests_docker.sh -ir
+tools/run_tests.sh -ir
 echo "Done!"
 echo ""
 
@@ -58,8 +58,8 @@ echo ""
 echo "************* Setup WebUI ******************"
 echo "***************************************************"
 
-echo "[webui]" >> /opt/rucio/etc/rucio.cfg
-echo "urls = http://localhost:3000" >> /opt/rucio/etc/rucio.cfg
+#echo "[webui]" >> /opt/rucio/etc/rucio.cfg
+#echo "urls = http://localhost:3000" >> /opt/rucio/etc/rucio.cfg
 
 echo "Done!"
 echo ""
