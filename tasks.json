@@ -4,6 +4,11 @@
 		{
 			"label": "start-containers",
 			"type": "docker-compose",
+			"options": {
+                "env": {
+                    "DOCKER_DEFAULT_PLATFORM": "linux/amd64"
+                }
+            },
 			"dockerCompose": {
 				"up": {
 					"detached": true,
