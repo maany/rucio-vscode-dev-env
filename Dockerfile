@@ -12,7 +12,7 @@ COPY utils /opt/rucio/debug_utils
 RUN rm /usr/bin/python && ln -fs /usr/bin/python2 /usr/bin/python
 
 ## install utils
-RUN yum install -y wget net-tools iproute openssh openssh-server openssh-clients openssl-libs tcpdump telnet ntpsec
+RUN yum install -y wget net-tools iproute openssh openssh-server openssh-clients openssl-libs tcpdump telnet ntpsec procps
 
 ## enable python3
 RUN rm /usr/bin/python && ln -fs /usr/bin/python3 /usr/bin/python
