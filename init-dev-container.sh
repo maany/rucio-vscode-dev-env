@@ -48,7 +48,7 @@ echo "************* Setup WebUI ******************"
 echo "***************************************************"
 
 echo "[webui]" >> /opt/rucio/etc/rucio.cfg
-echo "urls = http://localhost:3000" >> /opt/rucio/etc/rucio.cfg
+echo "urls = http://localhost:3000/" >> /opt/rucio/etc/rucio.cfg
 
 echo "Done!"
 echo ""
