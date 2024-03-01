@@ -8,6 +8,7 @@ services:
       dockerfile: ./Dockerfile
       target: debug
     ports:
+      - 5679:5679
       - 443:443
     volumes:
       - ../tools:/opt/rucio/tools
