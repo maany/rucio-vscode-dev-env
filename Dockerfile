@@ -1,5 +1,5 @@
 ## Base Image
-FROM docker.io/rucio/rucio-dev as base
+FROM docker.io/rucio/rucio-dev:latest-alma9 as base
 
 ## install debugpy
 FROM base as debug
@@ -35,6 +35,8 @@ ENV CA_BUNDLE="/etc/grid-security/ca-bundle.pem"
 ENV PYTHONDONTWRITEBYTECODE 1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED 1
+
+ENV RUCIO_POLICY_PACKAGE="atlas_rucio_policy_package"
 
 ## Copy init script
 COPY init-dev-container.sh /opt/rucio/etc/
