@@ -9,7 +9,7 @@ RUN python3 -m pip install debugpy pyOpenSSL
 COPY utils /opt/rucio/debug_utils
 
 ## install utils
-RUN yum install -y wget net-tools iproute openssh openssh-server openssh-clients openssl-libs tcpdump telnet ntpsec procps python-psycopg2
+RUN yum install -y wget net-tools iproute openssh openssh-server openssh-clients openssl-libs tcpdump telnet ntpsec procps
 
 ## expose debug port
 EXPOSE 5678

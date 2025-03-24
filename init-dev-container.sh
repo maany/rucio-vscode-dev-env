@@ -2,6 +2,7 @@
 
 echo "************* temp: psycopg3 config patch ******************"
 sed -i "s@postgresql://@postgresql+psycopg://@g" /opt/rucio/etc/rucio.cfg
+sed -i "s@postgresql://@postgresql+psycopg://@g" /opt/rucio/etc/alembic.ini
 
 echo "************* Copying Rucio Config ******************"
 echo "*****************************************************"
