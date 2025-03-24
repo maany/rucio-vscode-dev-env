@@ -41,7 +41,7 @@ services:
     ports:
       - "127.0.0.1:8080:80"
   fts:
-    image: docker.io/rucio/fts
+    image: docker.io/rucio/test-fts
     ports:
       - "127.0.0.1:8446:8446"
       - "127.0.0.1:8449:8449"
@@ -60,7 +60,7 @@ services:
       - MYSQL_ROOT_PASSWORD=fts
       - MYSQL_DATABASE=fts
   xrd1:
-    image: docker.io/rucio/xrootd
+    image: docker.io/rucio/test-xrootd
     ports:
       - "127.0.0.1:1094:1094"
     environment:
@@ -74,7 +74,7 @@ services:
         soft: 10240
         hard: 10240
   xrd2:
-    image: docker.io/rucio/xrootd
+    image: docker.io/rucio/test-xrootd
     ports:
       - "127.0.0.1:1095:1095"
     environment:
@@ -88,7 +88,7 @@ services:
         soft: 10240
         hard: 10240
   xrd3:
-    image: docker.io/rucio/xrootd
+    image: docker.io/rucio/test-xrootd
     ports:
       - "127.0.0.1:1096:1096"
     environment:
@@ -102,7 +102,7 @@ services:
         soft: 10240
         hard: 10240
   xrd4:
-    image: docker.io/rucio/xrootd
+    image: docker.io/rucio/test-xrootd
     ports:
       - "127.0.0.1:1097:1097"
     environment:
@@ -139,7 +139,7 @@ services:
       - ACTIVEMQ_GROUPS_reads=receiver
       - ACTIVEMQ_CONFIG_SCHEDULERENABLED=true
   ssh1:
-    image: docker.io/rucio/ssh
+    image: docker.io/rucio/test-ssh
     ports:
       - "127.0.0.1:2222:22"
     volumes:
