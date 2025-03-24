@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "************* temp: psycopg3 config patch ******************"
+sed -i "s@postgresql://@postgresql+psycopg://@g" /opt/rucio/etc/rucio.cfg
+
 echo "************* Copying Rucio Config ******************"
 echo "*****************************************************"
 cp etc/rse-accounts.cfg.template etc/rse-accounts.cfg
