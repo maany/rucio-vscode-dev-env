@@ -9,11 +9,14 @@ services:
       target: debug
     ports:
       - 5679:5679
+      - 5680:5680
+      - 5681:5681
       - 443:443
     volumes:
       - ../tools:/opt/rucio/tools
       - ../bin:/opt/rucio/bin
       - ../lib:/opt/rucio/lib
+      - ../tests:/opt/rucio/tests
       - /sys/fs/cgroup:/sys/fs/cgroup
       - ../etc/certs/ruciouser.pem:/opt/rucio/etc/usercert.pem:z
       - ../etc/certs/ruciouser.key.pem:/opt/rucio/etc/userkey.pem:z
